@@ -1,10 +1,218 @@
 <html>
-    <head>
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    </head>
-    <body>
-        <ul>
-            <li><a href="prestimer\index.html">Presentation Timer</a></li>
-        </ul>
-    </body>
+   <!--SITE TAG GOES HERE-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119731958-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-119731958-1');
+    </script>
+    
+    <link rel="stylesheet" href="css/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="js/jquery-min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+
+    <script language="Javascript">
+    
+    var StatesEnum = Object.freeze({"loading":0,"stopped":1, "paused":2, "running":3})
+    var state = StatesEnum.loading
+
+    var time_warn = 0
+    var time_warn2 = 0
+    var time_over = 0 
+    var time_pause = 0
+
+    // For the time now
+    Date.prototype.timeNow = function () {
+        return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+    }
+
+    function update_class(new_class) {
+        if ($("#the_timer").hasClass("time_off"))   { cur_class = "time_off"; } 
+        if ($("#the_timer").hasClass("time_over"))  { cur_class = "time_over"; } 
+        if ($("#the_timer").hasClass("time_warn"))  { cur_class = "time_warn"; } 
+        if ($("#the_timer").hasClass("time_ok"))    { cur_class = "time_ok"; } 
+        
+        
+        if (cur_class != new_class) {
+            $("#the_timer").switchClass(cur_class, new_class, 1000)
+        }
+    }
+
+    function change_state(new_state) {
+            console.log("change_state", state, new_state)
+            if (state == new_state) {
+                return;
+            }
+            
+            $("input").prop("disabled", true)
+            $("button").button('enable')
+
+            if (new_state == StatesEnum.stopped) 
+            {
+                state = new_state;                
+                time_over = 0
+                time_warn = 0
+                $( "#pause_button ").button("disable")                
+                $( "#reset_button ").button("disable")
+                update_class("time_off")
+                $("#the_countdown").text("--:--")
+                $("input").prop("disabled", false)
+            } else if (new_state == StatesEnum.paused) 
+            {
+                state = new_state;                
+                time_pause = new Date().getTime()
+                $( "#pause_button ").button("disable")                                
+            } else if(new_state == StatesEnum.running) 
+            {
+                var time = new Date()
+                // Get absolute timing points 
+                if (state == StatesEnum.stopped) 
+                {
+                    time_over = time.getTime() + (parseInt($("#input_period").val()) * 60 * 1000)
+                    time_warn = time_over - (parseInt($("#input_warn").val()) * 60 * 1000)
+                } else if (state == StatesEnum.paused) 
+                {
+                    var difference = time.getTime() - time_pause
+                    time_over += difference
+                    time_warn += difference
+                }
+
+                console.log("START", time.getTime(), time_over, time_warn)
+                state = new_state;
+                $( "#start_button ").button("disable")    
+                $( "#reset_button ").button("disable")    
+                                          
+            } else {
+                // Shouldn't happen ;) 
+            }
+            
+        }
+
+       
+
+        function tick() { 
+            
+            var time = new Date()
+            $("#the_time").text(time.timeNow())
+            setTimeout(tick, 1000)
+
+            if (state != StatesEnum.running) { 
+                return
+            }
+
+            var difference = time_over - time.getTime() 
+
+            s = ""
+
+            t = difference
+            if (difference < 0) {
+                s = "-"
+                c = "time_over"
+                t = 0 - difference
+            } else if (time > time_warn) {
+                c = "time_warn"
+            } else { 
+                c = "time_ok"
+            }
+            console.log(time_over, t, c)
+            t = Math.round(t / 1000)
+            secs = t % 60
+            mins = (t - secs) / 60
+            
+            if (secs < 10) { 
+                s += "" + mins + ":0"+secs
+            } else { 
+                s += "" + mins + ":"+secs
+            }
+            $("#the_countdown").text(s)
+            update_class(c)
+        }
+
+
+
+    $( document ).ready(function() {       
+
+        $( "#start_button ").button().on("click", function() { change_state(StatesEnum.running); return false; })
+        $( "#pause_button ").button().on("click", function() { change_state(StatesEnum.paused); return false;  })
+        $( "#reset_button ").button().on("click", function() { change_state(StatesEnum.stopped); return false;  })
+             
+        var url = new URL(location.href);
+        var input_period = url.searchParams.get("input_period");
+        var input_warn = url.searchParams.get("input_warn");
+        var running = url.searchParams.get("running");
+
+        console.log(input_period, input_warn)
+        if (!input_period) { input_period = 60; }
+        if (!input_warn) { input_warn = 5; }
+        $("#input_period").val(input_period)
+        $("#input_warn").val(input_warn)
+        
+        change_state(StatesEnum.stopped)
+
+        if (running) {
+            change_state(StatesEnum.running)
+        }
+        setTimeout(tick, 1000)
+    })
+    
+    </script>
+  </head>
+
+  <body>
+      <div class='time_off' class='timer' id='the_timer'>
+        <span class='time' id='the_countdown'>
+            --:--
+        </span>      
+        <hr>
+        <span class='time' id='the_time'>
+            --:--:--
+        </span>
+      </div>
+      <hr>
+      <div class='controls'>
+          <center>
+          <form id="diaglog-form-config">
+             <span>Timer for 
+                <input id="input_period" class='input_dropdown' type="number" name="example" list="exampleList">
+                <datalist id="exampleList">
+                    <option value="120">
+                    <option value="105">
+                    <option value="90">
+                    <option value="75">
+                    <option value="60" selected>
+                    <option value="45">
+                    <option value="30">                  
+                    <option value="15">          
+                </datalist>
+            mins.</span>
+            
+            <span>Warn at <input id="input_warn" class='input_dropdown' type="number" name="example" list="exampleList">
+                <datalist id="exampleList">                    
+                    <option value="30">
+                    <option value="25"> 
+                    <option value="20">
+                    <option value="15">
+                    <option value="10">
+                    <option value="5" selected>                  
+                    <option value="1">          
+                </datalist> mins before end.</span>
+                <BR>
+            <button id="start_button" class="action_button">Start</button>
+            <button id="pause_button" class="action_button">Pause</button>
+            <button id="reset_button" class="action_button">Reset</button>
+            <br>            
+        </form>
+    </center>
+    </div>
+
+  </body>
 </html>
