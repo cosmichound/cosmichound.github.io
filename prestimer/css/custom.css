@@ -1,0 +1,59 @@
+BODY {
+    background-color: grey
+}
+
+#the_timer {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace
+}
+
+#the_countdown { 
+    font-size: 25vw;
+}
+#the_time { 
+    font-size: 10vw;
+}
+
+.time_off {
+    background-color: lightgray
+}
+
+.time_ok { 
+    background-color: lightgreen
+}
+
+.time_warn { 
+    background-color: lightyellow;
+    color: red; 
+}
+
+.time_warn2 { 
+    background-color: lightyellow;
+    color: red;
+}
+
+
+.time_over { 
+    background-color: red; 
+    color: black;
+}
+
+.input_dropdown { 
+    width: 5em;
+}
+
+#position { 
+    width: 480px;
+    float: left;
+    margin-left: 18px;
+    margin-top: 14px;
+}
+
+#custom-handle {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+  }
