@@ -1,0 +1,113 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.res_hist::before { 
+
+}
+
+.res_work_pos::before { 
+}
+
+.res_phone::before { 
+    padding-right: 5px;
+    content: "\260E";
+}
+.res_email::before {
+    padding-right: 5px;
+    content: "\2709";
+}
+.res_email, .res_phone { 
+    padding-right: 10px;
+}
+
+h2 { 
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.res_work_iter { 
+    font-style: italic;
+    margin-top: 10px;
+}
+.res_work_pos, .res_work_dates {
+    font-size: 70%;
+    font-weight: bold;
+}
+.res_work_dates { 
+    float: right;
+}
+.res_name { 
+    font-size: 130%;
+    font-weight: bold;
+}
+.res_intro { 
+    padding-top: 20px;
+}
+.res_contact { 
+    float: right;
+    font-style: italic;
+}
+
+.res_work_company, .res_edu_inst { 
+    margin-top: 10px;
+    font-weight: bold;
+    font-style: normal;
+    text-decoration: underline;
+    display: block;
+    padding-bottom: 5px;
+}
+
+.res_work_company_group { 
+    border-left: 2px solid lightgrey;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    
+}
+
+.res_edu_dates { 
+    float: right
+}
+
+
+.res_hist_item, .res_basics  {
+    border-top: 2px solid #8e18af;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/*
+.res_history {
+    display: block;
+    box-sizing: border-box;
+    margin: 0px -10px;
+    }
+    
+.res_history::after {
+    clear: both;
+    content: '';
+    display: block;
+}
+
+.res_hist_item {
+    border-top: 2px solid #8e18af;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, 0.1);
+    float: left;
+    box-sizing: border-box;
+    width: 30%;
+    margin: 20px;
+    padding: 0px 10px;
+}
+
+.res_history:nth-child(2n + 1) {
+    float:right
+    clear: both;
+*/
