@@ -2,6 +2,10 @@ body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+.res_skill_list { 
+    font-size: 80%;
+}
+
 .res_hist::before { 
 
 }
@@ -19,6 +23,7 @@ body {
 }
 .res_email, .res_phone { 
     padding-right: 10px;
+    white-space: nowrap;
 }
 
 h2 { 
